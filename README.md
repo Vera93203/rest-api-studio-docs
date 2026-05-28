@@ -1,15 +1,73 @@
+<div align="center">
+
 # REST API Studio & Docs
 
-An interactive portfolio application that demonstrates how an **enterprise Job Board REST API** is designed and operated—auth flows, job listings, applications, caching, queues, and tests—inside a single React workspace.
+**Interactive portfolio studio for an enterprise Job Board REST API**
 
-> **What this repo is:** A browser-based **API studio** (Swagger-style playground, code explorer, live infra monitors, architecture docs). The business logic in `src/modules/` runs against **in-memory** PostgreSQL, Redis, and BullMQ simulators so you can explore the system without Docker or a live backend.
+[![Live Demo](https://img.shields.io/badge/Live_Demo-Open_Studio-2563eb?style=for-the-badge&logo=googlecloud&logoColor=white)](https://rest-api-studio-docs-507307610839.europe-west2.run.app)
+[![GitHub](https://img.shields.io/badge/GitHub-Source_Code-181717?style=for-the-badge&logo=github&logoColor=white)](https://github.com/Vera93203/rest-api-studio-docs)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Vite](https://img.shields.io/badge/Vite-6-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://www.prisma.io/)
+
+[🚀 **Try the live app**](https://rest-api-studio-docs-507307610839.europe-west2.run.app) · [📂 Repository](https://github.com/Vera93203/rest-api-studio-docs) · [⬇ Clone & run locally](#getting-started)
+
+</div>
+
+---
+
+## Live showcase
+
+Explore the full studio in your browser — no install, no database setup.
+
+**→ [https://rest-api-studio-docs-507307610839.europe-west2.run.app](https://rest-api-studio-docs-507307610839.europe-west2.run.app)**
+
+<a href="https://rest-api-studio-docs-507307610839.europe-west2.run.app">
+  <img src="docs/showcase-playground.png" alt="REST JobBoard Core — Swagger Client playground with endpoint list, Zod-validated JSON body, and response console" width="100%" />
+</a>
+
+<p align="center"><em>Swagger Client — register users, execute endpoints, and inspect responses in real time</em></p>
+
+### What you can try on the live demo
+
+| Module | What it does |
+|--------|----------------|
+| **Swagger Client** | Pick routes (`/register`, `/login`, `/jobs`, …), edit JSON bodies, hit **Execute Request**, see HTTP status & timing |
+| **Code Directory** | Browse highlighted Prisma schema, services, Fastify routes, and test files |
+| **Jest Spec Suite** | Run a simulated CI pipeline with coverage output |
+| **Core Monitors** | Watch Users, Jobs, Applications, Redis cache keys, and BullMQ jobs update live |
+| **System Blueprint** | Read architecture notes on JWT rotation, rate limits, and async workers |
+| **Token Authority** | Sidebar panel shows decoded JWT claims after login |
+
+---
+
+## About this project
+
+**REST API Studio & Docs** is a portfolio application that demonstrates how a production **Job Board REST API** is designed and operated — authentication, listings, applications, caching, queues, and tests — inside one polished React workspace.
+
+> **Studio (this repo):** Business logic in `src/modules/` runs in the browser against **in-memory** PostgreSQL, Redis, and BullMQ simulators. You get real request/response behavior without Docker.
 >
-> **What it showcases:** Production patterns you would ship with **Fastify**, **Prisma**, **PostgreSQL**, **Redis**, and **BullMQ**—documented in code, schema, and the built-in blueprint tab.
+> **Production target:** The same patterns map to **Fastify**, **Prisma**, **PostgreSQL**, **Redis**, and **BullMQ** — documented in code, schema, and the in-app blueprint.
+
+---
+
+## Highlights
+
+- **All-in-one backend console** — API playground, codebase viewer, test runner UI, infra monitors, and docs in a single app
+- **Fastify + Prisma** — route schemas, controllers, services, and a full relational model (`User`, `Company`, `Job`, `Application`, `RefreshToken`)
+- **JWT auth** — access + refresh rotation, reuse detection, role-based access (`USER` · `COMPANY_REP` · `ADMIN`)
+- **Zod validation** — request bodies parsed before handlers run
+- **Redis rate limiting** — sliding-window limits (100 req / 15 min for anonymous traffic in the UI)
+- **BullMQ-style jobs** — welcome emails, password reset, application notifications, PDF reports
+- **Deployed on Google Cloud Run** — static SPA, instant access for recruiters and reviewers
 
 ---
 
 ## Table of contents
 
+- [Live showcase](#live-showcase)
+- [About this project](#about-this-project)
 - [Features](#features)
 - [Tech stack](#tech-stack)
 - [Architecture](#architecture)
@@ -17,7 +75,7 @@ An interactive portfolio application that demonstrates how an **enterprise Job B
 - [Data model](#data-model)
 - [Project structure](#project-structure)
 - [Getting started](#getting-started)
-- [Try it: demo walkthrough](#try-it-demo-walkthrough)
+- [Demo walkthrough](#demo-walkthrough)
 - [Build & deploy](#build--deploy)
 - [Tests](#tests)
 - [Environment variables](#environment-variables)
@@ -30,22 +88,19 @@ An interactive portfolio application that demonstrates how an **enterprise Job B
 
 | Area | Description |
 |------|-------------|
-| **Swagger Client** | Execute REST endpoints with JSON bodies, view HTTP status and timing, and bind JWT sessions from login/register/refresh. |
-| **Code Directory** | Browse highlighted source for Prisma schema, core infra, modules, tests, and reference Fastify route definitions. |
-| **Jest Spec Suite** | Animated test-runner console that mirrors a full CI run (auth, jobs, rate limiter) with coverage summary. |
-| **Core Monitors** | Live views of in-memory **Users / Jobs / Applications**, Redis keys & rate-limit logs, and BullMQ job ledger + worker events. |
-| **System Blueprint** | In-app documentation for RS256 JWT rotation, sliding-window rate limits, async workers, and deployment notes. |
+| **Swagger Client** | Execute REST endpoints with JSON bodies, view HTTP status and timing, bind JWT sessions from login/register/refresh |
+| **Code Directory** | Syntax-highlighted source for Prisma schema, core infra, modules, tests, and Fastify route definitions |
+| **Jest Spec Suite** | Animated test-runner console mirroring CI (auth, jobs, rate limiter) with coverage summary |
+| **Core Monitors** | Live **Users / Jobs / Applications**, Redis keys & rate-limit logs, BullMQ job ledger + worker events |
+| **System Blueprint** | In-app docs for RS256 JWT rotation, sliding-window rate limits, async workers, deployment |
 
-### Security & backend patterns (implemented in the service layer)
+### Security & backend patterns
 
-- **JWT access tokens** (15-minute TTL) and **refresh token rotation** (7-day sliding sessions)
-- **Refresh token reuse detection** — replays revoke all active sessions for the user
-- **Role-based access** — `USER`, `COMPANY_REP`, `ADMIN`
-- **Password hashing** via Node `crypto` (HMAC-SHA256 in the demo; bcrypt/argon2 in production)
-- **Zod-validated** request shapes (`auth.schema.ts`)
-- **Structured errors** — `ValidationError`, `UnauthorizedError`, `ConflictError`, etc. (`AppError.ts`)
-- **Redis sliding-window rate limiting** (simulated; 100 req / 15 min anonymous in the UI)
-- **BullMQ-style async jobs** — welcome email, password reset, application notifications, PDF reports
+- JWT access tokens (15 min) + refresh rotation (7-day sliding sessions)
+- Refresh token reuse detection — replays revoke all active sessions
+- Role-based access control
+- Structured errors (`ValidationError`, `UnauthorizedError`, `ConflictError`, …)
+- Password hashing via Node `crypto` (demo); bcrypt/argon2 in production
 
 ---
 
@@ -53,11 +108,12 @@ An interactive portfolio application that demonstrates how an **enterprise Job B
 
 | Layer | Technologies |
 |-------|----------------|
-| **UI** | React 19, TypeScript, Tailwind CSS 4, Lucide icons, Vite 6 |
-| **API design (reference)** | Fastify route schemas, OpenAPI-style tags & responses |
-| **Data** | Prisma schema (PostgreSQL target) + in-memory store for the studio |
-| **Cache / queue** | Redis & BullMQ simulators (`src/core/cache`, `src/core/queue`) |
+| **UI** | React 19, TypeScript, Tailwind CSS 4, Lucide, Vite 6 |
+| **API design** | Fastify route schemas, OpenAPI-style tags & responses |
+| **Data** | Prisma schema (PostgreSQL) + in-memory store for the studio |
+| **Cache / queue** | Redis & BullMQ simulators |
 | **Validation** | Zod 4 |
+| **Hosting** | Google Cloud Run (live demo) |
 
 ---
 
@@ -73,16 +129,16 @@ flowchart TB
   end
 
   subgraph Simulators["In-memory simulators"]
-    PG[(Prisma-style store<br/>Users · Jobs · Applications)]
-    RD[(Redis<br/>cache · rate limits)]
-    BQ[(BullMQ<br/>background jobs)]
+    PG[(Prisma-style store)]
+    RD[(Redis)]
+    BQ[(BullMQ)]
   end
 
   SVC --> PG
   SVC --> RD
   SVC --> BQ
 
-  subgraph Production["Production target (documented, not required to run demo)"]
+  subgraph Production["Production target"]
     FF[Fastify HTTP server]
     DB[(PostgreSQL)]
     R[Redis]
@@ -93,22 +149,20 @@ flowchart TB
   end
 ```
 
-**Request flow in the playground:** the UI builds a mock Fastify `request` / `reply`, calls the same controllers and services used in a real server, then refreshes monitor panels from the in-memory stores.
-
 ---
 
 ## API endpoints
 
-Base path: `/api` (simulated in the studio; paths match a future Fastify deployment).
+Base path: `/api` (simulated in the studio).
 
 ### Authentication
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| `POST` | `/api/auth/register` | Public | Register user; queue welcome email job |
-| `POST` | `/api/auth/login` | Public | Issue access + refresh token pair |
-| `POST` | `/api/auth/refresh` | Public | Rotate refresh token; detect reuse abuse |
-| `POST` | `/api/auth/forgot-password` | Public | Enqueue reset token (Redis TTL + BullMQ) |
+| `POST` | `/api/auth/register` | Public | Register user; queue welcome email |
+| `POST` | `/api/auth/login` | Public | Issue access + refresh tokens |
+| `POST` | `/api/auth/refresh` | Public | Rotate refresh token; detect reuse |
+| `POST` | `/api/auth/forgot-password` | Public | Enqueue reset token |
 | `POST` | `/api/auth/reset-password` | Public | Complete password reset |
 | `POST` | `/api/auth/logout` | Bearer | Revoke refresh token |
 | `POST` | `/api/auth/promote` | Admin | Elevate user role |
@@ -117,25 +171,16 @@ Base path: `/api` (simulated in the studio; paths match a future Fastify deploym
 
 | Method | Path | Auth | Description |
 |--------|------|------|-------------|
-| `GET` | `/api/jobs` | Public | Search/filter listings (cursor, location, salary, type) |
-| `POST` | `/api/jobs` | Company rep / Admin | Create job for own company |
-| `GET` | `/api/applications` | Bearer | List applications (scoped by role) |
-| `POST` | `/api/applications` | User | Submit application; queue notifications |
+| `GET` | `/api/jobs` | Public | Search/filter listings |
+| `POST` | `/api/jobs` | Company rep / Admin | Create job listing |
+| `GET` | `/api/applications` | Bearer | List applications (role-scoped) |
+| `POST` | `/api/applications` | User | Submit application |
 
 ---
 
 ## Data model
 
-Defined in [`prisma/schema.prisma`](prisma/schema.prisma):
-
-- **User** — email, password hash, role, optional company link
-- **Profile** — title, resume URL, bio, skills
-- **Company** — verified employers with slug and jobs
-- **Job** — listings with `JobType`, salary range, featured flag
-- **Application** — status workflow (`APPLIED` → `OFFER` / `REJECTED` / …)
-- **RefreshToken** — rotation and revocation tracking
-
-Enums: `Role`, `JobType`, `ApplicationStatus`.
+See [`prisma/schema.prisma`](prisma/schema.prisma): **User**, **Profile**, **Company**, **Job**, **Application**, **RefreshToken** with enums `Role`, `JobType`, `ApplicationStatus`.
 
 ---
 
@@ -143,26 +188,15 @@ Enums: `Role`, `JobType`, `ApplicationStatus`.
 
 ```text
 rest-api-studio-docs/
-├── prisma/
-│   └── schema.prisma          # PostgreSQL data model
+├── docs/
+│   └── showcase-playground.png   # README screenshot
+├── prisma/schema.prisma
 ├── src/
-│   ├── App.tsx                # Studio shell (tabs, playground, monitors)
-│   ├── core/
-│   │   ├── cache/redis.ts     # In-memory Redis + rate-limit logs
-│   │   ├── database/prisma.ts # In-memory DB + seed data
-│   │   ├── queue/bullmq.ts    # Job queue simulator
-│   │   └── errors/AppError.ts
-│   ├── modules/
-│   │   ├── auth/              # Controller, service, routes, Zod schemas
-│   │   ├── jobs/
-│   │   └── applications/
-│   └── data/mockCode.ts       # Extra files shown in Code Directory
+│   ├── App.tsx                   # Studio shell
+│   ├── core/                     # DB, Redis, BullMQ, errors
+│   ├── modules/                  # auth, jobs, applications
+│   └── data/mockCode.ts
 ├── tests/
-│   ├── auth.service.test.ts
-│   ├── jobs.service.test.ts
-│   └── rate_limiter.test.ts
-├── index.html
-├── vite.config.ts
 └── package.json
 ```
 
@@ -172,117 +206,83 @@ rest-api-studio-docs/
 
 ### Prerequisites
 
-- **Node.js** 18+ (20 LTS recommended)
-- **npm** 9+
+Node.js 18+ · npm 9+
 
-### Install and run locally
+### Local development
 
 ```bash
 git clone https://github.com/Vera93203/rest-api-studio-docs.git
 cd rest-api-studio-docs
-
 npm install
 npm run dev
 ```
 
-Open **http://localhost:3000**.
-
-### Other scripts
+Open **http://localhost:3000** — or use the [live demo](https://rest-api-studio-docs-507307610839.europe-west2.run.app) instead.
 
 | Command | Description |
 |---------|-------------|
-| `npm run dev` | Start Vite dev server (port **3000**) |
+| `npm run dev` | Dev server (port 3000) |
 | `npm run build` | Production build → `dist/` |
-| `npm run preview` | Serve the production build locally |
-| `npm run lint` | TypeScript check (`tsc --noEmit`) |
-
-No database or Redis installation is required for the interactive studio.
+| `npm run preview` | Preview production build |
+| `npm run lint` | TypeScript check |
 
 ---
 
-## Try it: demo walkthrough
+## Demo walkthrough
 
-1. Open **Swagger Client** → **Register User** → **Execute Request**.  
-   Check **Core Monitors** for a new user row and a `send_welcome_email` queue job.
+Try this on the **[live app](https://rest-api-studio-docs-507307610839.europe-west2.run.app)** or locally:
 
-2. Run **Login Credentials** — the sidebar **TOKEN AUTHORITY** panel shows decoded JWT claims (role, subject).
-
-3. **Query Job Listings** (public), then **Create Job Listing** (requires `COMPANY_REP` or `ADMIN` — register/login as a rep or use **Promote User Role** as admin).
-
-4. **Submit Application** as a `USER`, then **Audit Applications** with the same session.
-
-5. Explore **Code Directory** for route definitions and service implementations.
-
-6. Open **Jest Spec Suite** → **Run Selected Specs** for the simulated CI output.
+1. **Swagger Client** → **Register User** → **Execute Request** → check **Core Monitors** for a new user and `send_welcome_email` job.
+2. **Login** → **Token Authority** shows JWT role and subject.
+3. **Query Job Listings**, then **Create Job Listing** (needs `COMPANY_REP` or **Promote User Role**).
+4. **Submit Application** → **Audit Applications**.
+5. **Code Directory** → explore services and routes.
+6. **Jest Spec Suite** → **Run Selected Specs**.
 
 ---
 
 ## Build & deploy
 
-The app is a static SPA after `npm run build`.
+```bash
+npm run build   # output: dist/
+```
 
-### GitHub Pages
-
-1. In `vite.config.ts`, set `base: '/your-repo-name/'` if not deploying from the repo root.
-2. Build: `npm run build`
-3. Deploy the `dist/` folder (e.g. GitHub Actions `peaceiris/actions-gh-pages` or Pages from `gh-pages` branch).
-
-### Vercel / Netlify / Cloudflare Pages
-
-- **Build command:** `npm run build`  
-- **Output directory:** `dist`  
-- **Install command:** `npm install`
-
-`GEMINI_API_KEY` is optional for this project; the studio does not require it for core API simulation.
+The live demo is hosted on **Google Cloud Run**. Any static host (Vercel, Netlify, GitHub Pages) works with `dist/` as the publish directory.
 
 ---
 
 ## Tests
 
-The repository includes Jest-style specs under `tests/` that exercise `authService`, `jobService`, and rate limiting against the **in-memory** stores:
-
-- `tests/auth.service.test.ts` — registration, login, refresh rotation, token reuse, password reset
-- `tests/jobs.service.test.ts` — search, pagination, featured ordering, company rep rules
-- `tests/rate_limiter.test.ts` — sliding window allow/block/release
-
-The in-app **Jest Spec Suite** tab runs a **visual simulation** of these suites for the portfolio demo. To run the real test files locally, add Jest (or Vitest) to `package.json`—the test source is written and ready to wire up.
+Jest-style specs in `tests/` target in-memory stores. The in-app **Jest Spec Suite** tab simulates CI output for the portfolio demo.
 
 ---
 
 ## Environment variables
 
-Copy [`.env.example`](.env.example) when extending the project (e.g. AI Studio or hosted deployment):
-
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `GEMINI_API_KEY` | No | Only if you add Gemini-powered features |
-| `APP_URL` | No | Public URL for OAuth/callbacks in hosted setups |
-
-For local studio use, **no `.env` file is required**.
+Optional — see [`.env.example`](.env.example). The studio runs without `.env` for local or live use.
 
 ---
 
 ## Roadmap
 
-Ideas for evolving this from a studio into a full production stack:
-
-- [ ] Fastify HTTP server mounting `authRoutes` and job/application routes
-- [ ] Real PostgreSQL via Prisma migrate + `DATABASE_URL`
-- [ ] Redis + BullMQ workers in Docker Compose
-- [ ] OpenAPI/Swagger UI served from the same origin as the API
+- [ ] Fastify HTTP server with real routes
+- [ ] PostgreSQL via Prisma migrate
+- [ ] Redis + BullMQ workers (Docker Compose)
+- [ ] OpenAPI/Swagger from the API origin
 - [ ] Vitest/Jest in CI with Testcontainers
-- [ ] RS256 keys from PEM files (replace demo HMAC JWT signing)
 
 ---
 
 ## License
 
-Source files are marked **SPDX-License-Identifier: Apache-2.0**. See file headers for details.
+**Apache-2.0** — see SPDX headers in source files.
 
 ---
 
-## Author
+<div align="center">
 
-Built as a portfolio piece demonstrating REST API design, auth, and operational concerns for a Job Board platform.
+**Built as a portfolio piece — enterprise REST API design for a Job Board platform**
 
-If this project helped you, consider starring the repo on GitHub.
+[⭐ Star on GitHub](https://github.com/Vera93203/rest-api-studio-docs) · [🚀 Live demo](https://rest-api-studio-docs-507307610839.europe-west2.run.app)
+
+</div>

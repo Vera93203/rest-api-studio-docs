@@ -1,6 +1,7 @@
 {
   "name": "rest-api-studio-docs",
   "description": "Interactive portfolio studio for an enterprise Job Board REST API — Swagger playground, JWT auth, Prisma schema, Redis/BullMQ monitors, and architecture docs.",
+  "homepage": "https://rest-api-studio-docs-507307610839.europe-west2.run.app",
   "private": true,
   "version": "0.0.0",
   "type": "module",
