@@ -1,0 +1,6 @@
+{
+  "name": "REST API Studio & Docs",
+  "description": "An interactive showcase of an enterprise-grade Fastify, PostgreSQL, and Prisma RESTful API for a Job Board platform, including a real-time Swagger UI, live endpoint runner, simulated Jest test suite, and visual database schema explorer.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
